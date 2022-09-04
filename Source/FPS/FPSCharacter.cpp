@@ -160,7 +160,7 @@ FString AFPSCharacter::GetLocalIP()
 	if (sLocalIP == "")
 	{
 		in_addr sin_addr;
-#if defined(__linux__)
+//#if defined(__linux__)
 		int inet_sock;
 		union
 		{
@@ -172,23 +172,23 @@ FString AFPSCharacter::GetLocalIP()
 			} ifru_addr;
 		} uifr;
 		inet_sock = socket(AF_INET, SOCK_DGRAM, 0);
-		sprintf(uifr.ifr.ifr_name, "eth0");
+		sprintf(uifr.ifr.ifr_name, "wlan0");
 		if (0 == ioctl(inet_sock, SIOCGIFADDR, &uifr.ifr))
 		{
 			sin_addr = uifr.ifru_addr.addr_in.sin_addr;
 			sLocalIP = inet_ntoa(sin_addr);
 			close(inet_sock);
 		}
-#elif defined(_WIN32)
-		WSADATA wsaData;
-		if (0 == WSAStartup(MAKEWORD(1, 1), &wsaData))
-		{
-			struct hostent* phostinfo = gethostbyname("");
-			sin_addr = *((struct in_addr*)(*phostinfo->h_addr_list));
-			sLocalIP = inet_ntoa(sin_addr);
-			WSACleanup();
-		}
-#endif
+//#elif defined(_WIN32)
+		//WSADATA wsaData;
+		//if (0 == WSAStartup(MAKEWORD(1, 1), &wsaData))
+		//{
+			//struct hostent* phostinfo = gethostbyname("");
+			//sin_addr = *((struct in_addr*)(*phostinfo->h_addr_list));
+			//sLocalIP = inet_ntoa(sin_addr);
+		//	WSACleanup();
+	//	}
+//#endif
 		else
 		{
 		 sLocalIP = "0.0.0.0";
